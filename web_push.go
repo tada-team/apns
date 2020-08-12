@@ -48,26 +48,3 @@ func (p WebPush) Send(c *Config) (r Result) {
 
 	return c.Send(url, req, Headers{}, client)
 }
-
-//func relativeUrl(s string) string {
-//	if s == "" {
-//		return ""
-//	}
-//
-//	if strings.HasPrefix(s, "/") {
-//		return s[1:]
-//	}
-//
-//	u, _ := url.Parse(s)
-//
-//	path := u.Path
-//	if u.RawQuery != "" {
-//		path += "?" + u.RawQuery
-//	}
-//
-//	if path != "" {
-//		path = strings.TrimLeft(path, "/")
-//	}
-//
-//	return path
-//}

@@ -17,12 +17,10 @@ import (
 	"path"
 	"strings"
 
-	"golang.org/x/crypto/pkcs12"
-
+	"github.com/aai/gocrypto/pkcs7"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
-
-	"github.com/aai/gocrypto/pkcs7"
+	"golang.org/x/crypto/pkcs12"
 )
 
 var icons = []string{
@@ -70,8 +68,14 @@ func SafariUrls(opts SafariOpts) (map[string]handler, error) {
 		opts.WebServiceURL = "/push"
 	}
 
+	prefix, err := relativeUrl(opts.WebServiceURL)
+	if err != nil {
+		return nil, err
+	}
+	prefix = strings.TrimRight(prefix, "/")
+
 	return map[string]handler{
-		opts.WebServiceURL + "/v1/log": func(w http.ResponseWriter, r *http.Request) error {
+		prefix + "/v1/log": func(w http.ResponseWriter, r *http.Request) error {
 			dump, err := httputil.DumpRequest(r, true)
 			if err != nil {
 				return errors.Wrap(err, "dump request fail")
@@ -80,7 +84,7 @@ func SafariUrls(opts SafariOpts) (map[string]handler, error) {
 			io.WriteString(w, "OK")
 			return nil
 		},
-		opts.WebServiceURL + "/v1/pushPackages/{website}": func(w http.ResponseWriter, r *http.Request) error {
+		prefix + "/v1/pushPackages/{website}": func(w http.ResponseWriter, r *http.Request) error {
 			w.Header().Set("Content-Type", "application/zip")
 			w.Header().Set("Content-Disposition", "attachment; filename=\"pushPackage.zip\"")
 			pushPackage, err := opts.websiteJson()
@@ -93,7 +97,7 @@ func SafariUrls(opts SafariOpts) (map[string]handler, error) {
 			log.Println("apns:", r.Method, r.RequestURI)
 			return nil
 		},
-		opts.WebServiceURL + "/v1/devices/{device}/registrations/{website}": func(w http.ResponseWriter, r *http.Request) error {
+		prefix + "/v1/devices/{device}/registrations/{website}": func(w http.ResponseWriter, r *http.Request) error {
 			vars := mux.Vars(r)
 			v := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 			if v[1] != ("ApplePushNotifications "+opts.AuthenticationToken) && v[1] != opts.AuthenticationToken {
