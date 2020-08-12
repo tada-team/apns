@@ -1,4 +1,4 @@
-module github.com/tada-team/firebase
+module github.com/tada-team/apns
 
 go 1.14
 

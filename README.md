@@ -1,1 +1,1 @@
-Firebase push notifications.
+iOS push notifications
