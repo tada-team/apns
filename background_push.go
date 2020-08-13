@@ -5,9 +5,11 @@ import (
 )
 
 type BackgroundPush struct {
-	Badge *int
-	Data  map[string]interface{}
-	Token string
+	Category string
+	ThreadId string
+	Badge    *int
+	Data     map[string]interface{}
+	Token    string
 }
 
 func (p BackgroundPush) Send(c *Config, h *Headers) (r Result) {
@@ -21,6 +23,8 @@ func (p BackgroundPush) Send(c *Config, h *Headers) (r Result) {
 	req["apns"] = aps{
 		ContentAvailable: 1,
 		Badge:            p.Badge,
+		Category:         p.Category,
+		ThreadId:         p.ThreadId,
 	}
 
 	if h == nil {

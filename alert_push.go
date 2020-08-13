@@ -5,12 +5,11 @@ import (
 )
 
 type AlertPush struct {
+	BackgroundPush
 	Title    string
 	Subtitle string
 	Body     string
-	Badge    *int
-	Data     map[string]interface{}
-	Token    string
+	Sound    string
 }
 
 func (p AlertPush) Send(c *Config, h *Headers) (r Result) {
@@ -21,10 +20,15 @@ func (p AlertPush) Send(c *Config, h *Headers) (r Result) {
 		req[k] = v
 	}
 
+	if p.Sound == "" {
+		p.Sound = "default"
+	}
+
 	req["apns"] = aps{
 		Badge:    p.Badge,
-		Sound:    "default",
-		Category: "QuickReply",
+		Category: p.Category,
+		ThreadId: p.ThreadId,
+		Sound:    p.Sound,
 		Alert: &alert{
 			Title:   p.Title,
 			Subitle: p.Subtitle,
