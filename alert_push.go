@@ -9,22 +9,27 @@ type AlertPush struct {
 	Subtitle string
 	Body     string
 	Badge    *int
+	Data     map[string]interface{}
 	Token    string
 }
 
 func (p AlertPush) Send(c *Config, h *Headers) (r Result) {
 	url := fmt.Sprintf(urlMask, c.Host, p.Token)
 
-	req := new(struct {
-		Aps aps `json:"aps"`
-	})
-	req.Aps.Sound = "default"
-	req.Aps.Category = "QuickReply"
-	req.Aps.Badge = p.Badge
-	req.Aps.Alert = &alert{
-		Title:   p.Title,
-		Subitle: p.Subtitle,
-		Body:    p.Body,
+	req := make(map[string]interface{})
+	for k, v := range p.Data {
+		req[k] = v
+	}
+
+	req["apns"] = aps{
+		Badge:    p.Badge,
+		Sound:    "default",
+		Category: "QuickReply",
+		Alert: &alert{
+			Title:   p.Title,
+			Subitle: p.Subtitle,
+			Body:    p.Body,
+		},
 	}
 
 	if h == nil {

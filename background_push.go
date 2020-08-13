@@ -13,7 +13,11 @@ type BackgroundPush struct {
 func (p BackgroundPush) Send(c *Config, h *Headers) (r Result) {
 	url := fmt.Sprintf(urlMask, c.Host, p.Token)
 
-	req := p.Data
+	req := make(map[string]interface{})
+	for k, v := range p.Data {
+		req[k] = v
+	}
+
 	req["apns"] = aps{
 		ContentAvailable: 1,
 		Badge:            p.Badge,
