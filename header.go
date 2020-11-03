@@ -97,6 +97,10 @@ func (h Headers) Map() map[string]string {
 	if h.Priority > 0 {
 		res["apns-priority"] = fmt.Sprintf("%d", h.Priority)
 	}
+	
+	if h.CollapseId != "" {
+		res["apns-collapse-id"] = h.CollapseId
+	}
 
 	if h.topic != "" {
 		res["apns-topic"] = h.topic
