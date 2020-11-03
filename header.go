@@ -102,11 +102,11 @@ func (h Headers) Map() map[string]string {
 		res["apns-topic"] = h.topic
 		switch h.PushType {
 		case PushTypeVoip:
-			h.topic += ".voip"
+			res["apns-topic"] += ".voip"
 		case PushTypeComplication:
-			h.topic += ".complication"
+			res["apns-topic"] += ".complication"
 		case PushTypeFileprovider:
-			h.topic += ".pushkit.fileprovider"
+			res["apns-topic"] += ".pushkit.fileprovider"
 		}
 	}
 
