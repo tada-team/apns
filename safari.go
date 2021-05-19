@@ -149,7 +149,7 @@ func (opts SafariOpts) websiteJson() ([]byte, error) {
 		return nil, errors.Wrap(err, "add to zip fail")
 	}
 
-	manifestBytes, err := json.Marshal(opts)
+	manifestBytes, err := json.Marshal(manifest)
 	if err != nil {
 		return nil, err
 	}
