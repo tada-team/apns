@@ -131,7 +131,7 @@ func (opts SafariOpts) websiteJson() ([]byte, error) {
 	manifest := make(map[string]string)
 
 	for _, filename := range icons {
-		data, err := ioutil.ReadFile(opts.IconsPath)
+		data, err := ioutil.ReadFile(path.Join(opts.IconsPath, filename))
 		if err != nil {
 			return nil, err
 		}
